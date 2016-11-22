@@ -1,7 +1,9 @@
 package main
 
 import (
-    "fmt"
+    "net/http"
+    "strconv"
+    "encoding/json"
 )
 
 // Test if the input n is prime
@@ -38,9 +40,29 @@ func getPrimes(start, end int) []int {
     return ret
 }
 
+// handler function for the prime server
+// if the parameters are valid, StatusOK and the json array of prime numbers will
+// be sent
+// otherwise, StatusBadRequest will be sent
+func handler(w http.ResponseWriter, r *http.Request) {
+    if len(r.URL.Query()["start_num"]) > 0 {
+        if len(r.URL.Query()["end_num"]) > 0 {
+            if start_num, err := strconv.Atoi(r.URL.Query()["start_num"][0]); err == nil {
+                if end_num, err := strconv.Atoi(r.URL.Query()["end_num"][0]); err == nil {
+                    if jData, err := json.Marshal(getPrimes(start_num, end_num)); err == nil {
+                        w.Header().Set("Content-Type", "application/json")
+                        w.Write(jData)
+                        return                      
+                    }
+                }
+            }
+        }
+    }
+    w.WriteHeader(http.StatusBadRequest)
+}
 
 func main() {
-    fmt.Printf("%v\n", getPrimes(1, 100))
-    fmt.Printf("%v\n", getPrimes(100, 1))
+    http.HandleFunc("/primes", handler)
+    http.ListenAndServe(":8080", nil)
 }
 
