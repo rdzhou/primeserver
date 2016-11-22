@@ -18,7 +18,7 @@ response(body): [5, 7, 11]
 
     # the current working directory is primieserver  
     go run primeserver.go  
-    curl –XGET localhost:8080/primes?start_num=4&end_num=11  
+    curl "localhost:8080/primes?start_num=4&end_num=11"
 
 ## How to Test:
 
