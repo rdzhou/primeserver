@@ -4,6 +4,8 @@ import (
     "fmt"
 )
 
+// Test if the input n is prime
+// return true if n is prime
 func isPrime(n int) bool {
     if n <= 0 {
         return false
@@ -16,6 +18,10 @@ func isPrime(n int) bool {
     return true
 }
 
+// get the prime numbers in [start, end]
+// start and end are both included
+// if start is not positive, it will be adjusted to 1
+// if end is not positive, an empty slice will be returned
 func getPrimes(start, end int) []int {
     ret := []int{}
     if start <= 0 {
